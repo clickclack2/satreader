@@ -18,11 +18,12 @@ console.log(`listening on port ${port}`)
 
 function boldify (_text) {
   //boldpctg determines the extent of processing, somewhere from 0.58 to 0.83 is recommended
-  var boldpctg = 0.58;
+  var boldpctg = 0.68;
   //create character banks for iteration
   var dashes = ["-","—"];
   var punctuation = [",",".","-",":",";","*","'",'"',"!","/","(",")","[","]","—"];
   var alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+  var numerals = ["0","1","2","3","4","5","6","7","8","9"];
   //create array of words from the text recieved from client by splitting at spaces
   var array1 = _text.split(" ");
   //declare master string which will be added to many times then sent to client
@@ -78,7 +79,6 @@ function boldify (_text) {
     //remove spaces again so as not to inflate letter count and bold percentage
     if(wordArray.length > 1 && wordArray[wordArray.length -1] == " "){
       wordArray.pop();
-      console.log("space popped");
     }else{
       space = "";
     }
@@ -100,7 +100,6 @@ function boldify (_text) {
       boldchars += 1;
     }
     //create two new arrays dividing the current word, depending on where bold formatting ends
-    console.log(l_value, boldchars);
     var boldarray = wordArray.slice(0,boldchars);
     var nonboldarray = wordArray.slice(boldchars,wordArray.length);
     var boldString = "";
