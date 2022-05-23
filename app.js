@@ -17,8 +17,8 @@ console.log(`listening on port ${port}`)
 });
 
 function boldify (_text) {
-  //boldpctg determines the extent of processing, somewhere from 0.48 to 0.73 is recommended
-  var boldpctg = 0.48;
+  //boldpctg determines the extent of processing, somewhere from 0.58 to 0.83 is recommended
+  var boldpctg = 0.58;
   //create character banks for iteration
   var dashes = ["-","—"];
   var punctuation = [",",".","-",":",";","*","'",'"',"!","/","(",")","[","]","—"];
@@ -72,21 +72,23 @@ function boldify (_text) {
     //remove starting/ending punctuation like parentheses, quotes, etc
     wordArrayOrig = l_value.split("");
     wordArray = l_value.split("");
-    p1 = "";
-    p2 = "";
+    var space = " ";
+    var p1 = "";
+    var p2 = "";
+    //remove spaces again so as not to inflate letter count and bold percentage
+    if(wordArray.length > 1 && wordArray[wordArray.length -1] == " "){
+      wordArray.pop();
+      console.log("space popped");
+    }else{
+      space = "";
+    }
     punctuation.forEach(function(p_value,p_index,p_array){
+      //remove beginning punctuation
       if(wordArray[0] == p_value){
         p1 = p_value;
         wordArray.splice(0,1);
       }
-      //account for spaces at the end of words when checking and removing end punctuation
-      if(wordArray[wordArray.length -1] == " "){
-        if(wordArray[wordArray.length -2] == p_value){
-          p2 = p_value + " ";
-          wordArray.splice(wordArray.length -2,2);
-        }
-      }
-      //also account for the broken hyphenated words which don't have spaces at the end
+      //remove end punctuation
       if(wordArray[wordArray.length -1] == p_value){
         p2 = p_value;
         wordArray.splice(wordArray.length -1,1);
@@ -98,6 +100,7 @@ function boldify (_text) {
       boldchars += 1;
     }
     //create two new arrays dividing the current word, depending on where bold formatting ends
+    console.log(l_value, boldchars);
     var boldarray = wordArray.slice(0,boldchars);
     var nonboldarray = wordArray.slice(boldchars,wordArray.length);
     var boldString = "";
@@ -115,7 +118,7 @@ function boldify (_text) {
     
     //add strings to master string with formatting around section intended to be bold, add in punctuation that was removed earlier
 
-    finalString = finalString + p1 + "<b>" + boldString + "</b>" + nonboldString + p2;
+    finalString = finalString + p1 + "<b>" + boldString + "</b>" + nonboldString + p2 + space;
     
   })
   //return master string for client
